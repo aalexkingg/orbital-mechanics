@@ -2,7 +2,9 @@
 
 This program contains animations of planets orbiting the sun. By calculating their velocities and position using numerical methods, their trajectory can be mapped.
 
-Where the current position is **r**(t), the position at the next step would therefore be $$**r**(t + \delta t)$$ with $$\delta t$$ being the time step. 
+Where the current position is **r**(t), the position at the next step would therefore be 
+$$**r**(t + \delta t)$$ 
+with $$\delta t$$ being the time step. 
 
 $$**r**(t + \delta t) = **r**(t) + \delta **r** = **r**(t) + **v**\delta t$$
                      
