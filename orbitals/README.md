@@ -2,13 +2,13 @@
 
 This program contains animations of planets orbiting the sun. By calculating their velocities and position using numerical methods, their trajectory can be mapped.
 
-Where the current position is **r**(t), the position at the next step would therefore be **r**(t + $\delta$t), with $\delta$t being the time step. 
+Where the current position is **r**(t), the position at the next step would therefore be $$**r**(t + \delta t)$$ with $$\delta t$$ being the time step. 
 
-$$**r**(t + \delta t) = **r**(t) + \delta**r** = **r**(t) + **v**\delta t$$
+$$**r**(t + \delta t) = **r**(t) + \delta **r** = **r**(t) + **v**\delta t$$
                      
 The velocity at the next step, **v**(t + $\delta$t), uses a form of Newtons equation of gravitation to calculate the velocity of the planet at the next time step.
                      
-$$**v** (t + \delta t) = **v**(t) + \delta**v** = **v**(t) - \frac{GMr}{|r|^{3}}\delta t$$
+$$**v** (t + \delta t) = **v**(t) + \delta **v** = **v**(t) - \frac{GMr}{|r|^{3}}\delta t$$
                   
 This program is designed to investigate the behaviour of planets orbiting a star, and how varying parameters such as initial position, velocity, mass of the planets and mass of the star can effect the orbital path. 
 
@@ -32,7 +32,7 @@ Changing the magnitude and direction of the initial velocity of the planet can h
 
 By using the equation:
 
-**v**$^{2}$ = $\frac{GM}{|r|^{2}}$**r**
+$$**v**^{2} = \frac{GM}{|r|^{2}}**r**$$
 
 The required velocity to maintain a stable circular orbit at a given radius can be determined. However, this equation is only able to calculate the magnitude velocity in the same direction at the position vector, in order to fidn the direction of the velocity vector, we simply need to rotate it 90 degrees - As the direction of velocity always acts at a perpendicular angle to the position vector (from the origin). 
 
