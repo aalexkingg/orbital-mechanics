@@ -1,15 +1,8 @@
-import pygame
 from orbital_mechanics.helpers import *
 from vpython import *
 
-pygame.init()
-
-WIDTH = 1600
-HEIGHT = 900
-
 AU = 1.495979e+11
 G = 1.
-
 
 
 class Pos(tuple):
@@ -245,8 +238,10 @@ def moon():
 
 def main():
 
-    # Circular orbit
+    m_star = 0
 
+    ############### Circular orbit of single planet ###############
+    """
     # Initialize canvas, and set parameters of star and planet.
     canvas()
     pos_planet = vector(0, 2, 0)  # initial position of planet
@@ -257,7 +252,7 @@ def main():
     # Animate orbit of planet
     animate_planet(pos_planet, v_planet, m_star, 1e-4)
 
-    # Elliptical Orbit
+    ############### Elliptical Orbit of single planet #####################
 
     # Initialize canvas, and set parameters of star and planet.
     canvas()
@@ -268,55 +263,81 @@ def main():
 
     # Animate orbit of planet
     animate_planet(pos_planet, v_planet, m_star, 1e-4)
+    
+    ############## Circular orbit of two planets ############################
+    
+    # Initialize canvas, and set parameters of star and planet.
+    canvas()
 
+    pos_planet1 = vector(1.85, 0, 0)  # initial position of planet1
+    v_planet1 = vector(0, 23.25, 0)  # initial velocity of planet1
 
+    pos_planet2 = vector(1.96, 0.4, 0)  # initial position of planet2
+    v_planet2 = vector(-4.44, 21.9, 0)  # initial velocity of planet2
 
+    m_star = 1000.  # mass of star (units where G=1)
+    sphere(pos=vector(0, 0, 0), color=color.yellow, radius=0.1)  # draw star
 
+    # Animate orbit of planet
+    animate_planets(pos_planet1, pos_planet2, v_planet1, v_planet2, m_star, 1e-4)
+    
+    
+    ################ Elliptical orbit of two planets ########################
+    
+    # Initialize canvas, and set parameters of star and planet.
+    canvas()
+
+    pos_planet1 = vector(1.85, 0, 0)  # initial position of planet1
+    v_planet1 = vector(0, 23.25, 0)  # initial velocity of planet1
+    mass1 = 2
+
+    pos_planet2 = vector(1.96, 0.4, 0)  # initial position of planet2
+    v_planet2 = vector(-4.44, 21.9, 0)  # initial velocity of planet2
+    mass2 = 2
+
+    m_star = 1000.  # mass of star (units where G=1)
+    sphere(pos=vector(0, 0, 0), color=color.yellow, radius=0.5)  # draw star
+
+    # Animate orbit of planet
+    animate_planets_real(pos_planet1, pos_planet2, v_planet1, v_planet2, mass1, mass2, m_star, 1e-4)
+    
+    #################### Real orbit of two planets ########################
+
+    # Initialize canvas, and set parameters of star and planet.
+    canvas()
+
+    m_star = 900.  # mass of star (units where G=1)
+    sphere(pos=vector(0, 0, 0), color=color.yellow, radius=0.5)  # draw star
+
+    pos_planet1 = vector(0, 2, 0)  # initial position of planet1
+    mass1 = 2  # mass of planet 1
+    v_planet1 = calculate_velocity(pos_planet1, m_star)  # initial velocity of planet1
+
+    pos_planet2 = vector(0, 3.5, 0)  # initial position of planet2
+    mass2 = 2  # mass of planet 2
+    v_planet2 = calculate_velocity(pos_planet2, m_star)  # initial velocity of planet2
+
+    # Animate orbit of planet
+    animate_planets_real(pos_planet1, pos_planet2, v_planet1, v_planet2, mass1, mass2, m_star, 1e-4)
     """
-    # setup
-    clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    running = True
+    ####################### Orbit of moon around planet ###############################
 
-    input_boxes = [
-        #InputTextBox(75, 20, 140, 32, "V(x)")
-    ]
+    # Initialize canvas, and set parameters of star and planet.
+    canvas()
 
-    sun_pos = Pos((WIDTH/2, HEIGHT/2))
-    sun_mass = 2e30
+    m_star = 900.  # mass of star (units where G=1)
+    sphere(pos=vector(0, 0, 0), color=color.yellow, radius=0.5)  # draw star
 
-    earth_orbit = 1*AU
-    earth_pos = Pos((sun_pos.x, sun_pos.y+300))
-    earth_mass = 6e24
+    pos_planet = vector(0, 8, 0)  # initial position of planet
+    v_planet = calculate_velocity(pos_planet, m_star)  # initial velocity of planet
+    m_planet = 2
 
+    pos_moon = vector(-0.1, 8, 0)  # initial position of moon
+    v_moon = vector(-12, -5, 0)  # initial velocity of moon
+    m_moon = 1e-6
 
-
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-            for box in input_boxes:
-                box.handle_event(event)
-                # handle held key in case of backspace etc
-
-            # animte circle here
-
-        for box in input_boxes:
-            box.update()
-
-        screen.fill((30, 30, 30))
-        for box in input_boxes:
-            box.draw(screen)
-
-        sun = pygame.draw.circle(screen, "yellow", sun_pos, 25)
-        earth = pygame.draw.circle(screen, "blue", earth_pos, 15)
-
-        pygame.display.flip()
-        # fps limit
-        clock.tick(60)
-"""
-
+    # Animate orbit of planet
+    animate_planets_real(pos_planet, pos_moon, v_planet, v_moon, m_planet, m_moon, m_star, 1e-4)
 
 if __name__ == "__main__":
     main()
