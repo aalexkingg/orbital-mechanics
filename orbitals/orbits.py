@@ -1,13 +1,51 @@
 from orbital_mechanics.helpers import *
 from vpython import *
 
-AU = 1.495979e+11
+AU = 1.495979e+8  # km
 G = 1.
+SOLAR_MASS = 1.988e30  # kg
 
 
 class Pos(tuple):
     def __init__(self, points):
         self.x, self.y = points
+
+
+class Planet:
+    def __init__(self, m, r, a, e, inc):
+        """
+
+        :param m: Mass (kg)
+        :param r: Radius (km)
+        :param a: Distance (km)
+        :param e: Eccentricity
+        :param inc: Inclination (degrees)
+        """
+        self.m = m
+        self.r = r
+        self.a = a
+        self.e = e
+        self.inc = inc
+
+        self.rel_m = m / SOLAR_MASS
+        self.rel_a = a / AU
+        self.R_p = self.rel_a * (1 - self.e)
+        self.R_a = self.rel_a * (1 + self.e)
+
+
+class Moon(Planet):
+    def __init__(self, m, r, a, e, inc, d):
+        """
+
+        :param m: Mass
+        :param r: Radius
+        :param a: Distance from sun
+        :param e: Eccentricity
+        :param inc: Inclination
+        :param d: Distance from parent
+        """
+        super().__init__(m, r, a, e, inc)
+        self.d = d
 
 
 def force(pos1, pos2, m1, m2):
@@ -23,6 +61,19 @@ def force(pos1, pos2, m1, m2):
     """
     # Calculates and returns value of the force
     return -G * m1 * m2 * (pos1 - pos2) / ((mag(pos1 - pos2)) ** 3)
+
+
+def net_force(pos, m):
+    """
+    Gets net force of object in position 0
+    :param pos: List of positions as vector
+    :param m: List of masses
+    :return: Net force
+    """
+    if len(pos) > 1 and len(pos) == len(m):
+        return sum([force(pos[0], pos[i+1], m[0], m[i+1]) for i in range(len(pos))])
+    else:
+        raise("Incorrect Parameters for net force.")
 
 
 def move_planet(position, velocity, m_star, dt):
@@ -236,12 +287,23 @@ def moon():
     animate_planets_real(pos_planet, pos_moon, v_planet, v_moon, m_planet, m_moon, m_star, 1e-5)
 
 
+MERCURY = Planet(0.33e24, 2439.5, 57.9e6, 0.206, 7)
+VENUS = Planet(4.87e24, 6052, 108.2e6, 0.007, 3.4)
+EARTH = Planet(5.972e24, 6378, 149.6e6, 0.017, 0)
+MARS = Planet(0.642e24, 3396, 228e6, 0.094, 1.8)
+JUPITER = Planet(1898e24, 71492, 778.5, 0.049, 1.3)
+SATURN = Planet(586e24, 60268, 1432e6, 0.052, 2.5)
+URANUS = Planet(86.8e24, 25559, 2867e6, 0.047, 0.8)
+NEPTUNE = Planet(102e24, 24764, 4515e6, 0.01, 1.8)
+PLUTO = Planet(0.013e24, 1188, 5906.4e6, 0.244, 17.2)
+
+MOON = Moon(0.073e24, 1737.5, 0.384e6, 0.055, 5.1, 0)
+
+
 def main():
-
-    m_star = 0
-
-    ############### Circular orbit of single planet ###############
     """
+    ############### Circular orbit of single planet ###############
+
     # Initialize canvas, and set parameters of star and planet.
     canvas()
     pos_planet = vector(0, 2, 0)  # initial position of planet
@@ -319,7 +381,7 @@ def main():
 
     # Animate orbit of planet
     animate_planets_real(pos_planet1, pos_planet2, v_planet1, v_planet2, mass1, mass2, m_star, 1e-4)
-    """
+
     ####################### Orbit of moon around planet ###############################
 
     # Initialize canvas, and set parameters of star and planet.
@@ -338,6 +400,25 @@ def main():
 
     # Animate orbit of planet
     animate_planets_real(pos_planet, pos_moon, v_planet, v_moon, m_planet, m_moon, m_star, 1e-4)
+    """
+
+    canvas()
+
+    m_star = 1.  # Solar mass
+
+    sphere(pos=vector(0, 0, 0), color=color.yellow, radius=1)  # draw star
+
+    pos_planet = vector(0, 8, 0)  # initial position of planet
+    v_planet = calculate_velocity(pos_planet, m_star)  # initial velocity of planet
+    m_planet = 2
+
+    pos_moon = vector(-0.1, 8, 0)  # initial position of moon
+    v_moon = vector(-12, -5, 0)  # initial velocity of moon
+    m_moon = 1e-6
+
+    # Animate orbit of planet
+    animate_planets_real(pos_planet, pos_moon, v_planet, v_moon, m_planet, m_moon, m_star, 1e-4)
+
 
 if __name__ == "__main__":
     main()
