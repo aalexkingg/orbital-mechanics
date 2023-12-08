@@ -6,11 +6,6 @@ G = 1.
 SOLAR_MASS = 1.988e30  # kg
 
 
-class Pos(tuple):
-    def __init__(self, points):
-        self.x, self.y = points
-
-
 class Planet:
     def __init__(self, m, r, a, e, inc):
         """
@@ -31,6 +26,8 @@ class Planet:
         self.rel_a = a / AU
         self.R_p = self.rel_a * (1 - self.e)
         self.R_a = self.rel_a * (1 + self.e)
+
+        self.pos = vector()
 
 
 class Moon(Planet):
@@ -422,4 +419,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    pygame.quit()
